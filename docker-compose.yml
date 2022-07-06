@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: > 
       bash -c "/myapp-miguchi/wait-for-it.sh db:3306 --timeout=30 --strict -- 
       bundle exec rails db:create &&
@@ -22,9 +22,9 @@ services:
     links:
       - db
     environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_HOST: db
 
   db:
     platform: linux/x86_64 #M1チップ対応のため追記
@@ -41,7 +41,7 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 80:80
     restart: always #明示的にstopさせるまでリスタートする。（失敗するたび遅延あり）

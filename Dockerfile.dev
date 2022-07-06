@@ -3,8 +3,7 @@ LABEL maintainer="Munetake_Miguchi<guchim1229@gmail.com>"
 
 #環境変数
 ENV APP="/myapp-miguchi"  \
-        CONTAINER_ROOT="./" \
-        DOCKERIZE_VERSION="v0.6.1"
+        CONTAINER_ROOT="./" 
 
 #ライブラリのインストール
 RUN apt-get update && apt-get install -y \
