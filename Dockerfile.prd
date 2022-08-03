@@ -16,17 +16,16 @@ RUN apt-get update && apt-get install -y \
 
 # 実行するディレクトリの指定
 WORKDIR $APP
+RUN mkdir -p tmp/sockets
+RUN mkdir -p tmp/pids
 COPY Gemfile Gemfile.lock $CONTAINER_ROOT
 RUN bundle install
+COPY . .
 
 # DB関連の実行
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-RUN mkdir -p tmp/sockets
-RUN mkdir -p tmp/pids
-
-COPY . .
 
 # 以下の記述があることでnginxから見ることができる
 VOLUME ["/myapp-miguchi/public"]
