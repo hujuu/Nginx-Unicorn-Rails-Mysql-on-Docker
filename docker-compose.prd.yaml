@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+    command: /myapp-miguchi/entrypoint.sh
+    tty: true
+    stdin_open: true
+    volumes:
+      - '.:/myapp-miguchi' #任意のアプリ名
+      - tmp-data:/myapp-miguchi/tmp #ソケット通信用ファイルをnginxコンテナと共有
+      - public-data:/myapp-miguchi/public #画像データなどをnginxと共有
+    environment:
+      RAILS_ENV: production
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - 80:80
+    restart: always #明示的にstopさせるまでリスタートする。（失敗するたび遅延あり）
+    volumes:
+      - tmp-data:/myapp-miguchi/tmp/sockets
+      - public-data:/myapp-miguchi/public
+
+volumes:
+  tmp-data:
+  public-data:

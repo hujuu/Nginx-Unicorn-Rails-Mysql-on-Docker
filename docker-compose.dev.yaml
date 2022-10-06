@@ -4,11 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    command: > 
-      bash -c "/myapp-miguchi/wait-for-it.sh db:3306 --timeout=30 --strict -- 
-      bundle exec rails db:create &&
-      bundle exec unicorn -p 3000 -c /myapp-miguchi/config/unicorn.rb"
+    command: /myapp-miguchi/entrypoint.sh
     tty: true
     stdin_open: true
     ports:

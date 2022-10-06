@@ -1,4 +1,4 @@
-FROM ruby:3.1
+FROM --platform=linux/x86_64 ruby:3.1
 LABEL maintainer="Munetake_Miguchi<guchim1229@gmail.com>"
 
 #環境変数
