@@ -4,20 +4,18 @@ services:
   web:
     build:
       context: .
-    command: /myapp-miguchi/entrypoint.sh
     tty: true
     stdin_open: true
     ports:
       - '3000:3000'
     volumes:
-      - '.:/myapp-miguchi' #任意のアプリ名
-      - tmp-data:/myapp-miguchi/tmp/sockets #ソケット通信用ファイルをnginxコンテナと共有
-      - public-data:/myapp-miguchi/public #画像データなどをnginxと共有
+      - .:/myapp-miguchi #任意のアプリ名
     depends_on:
       - db
     links:
       - db
     environment:
+      RAILS_ENV: development
       DB_USER: root
       DB_PASSWORD: root
       DB_HOST: db
@@ -37,17 +35,11 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile.dev
     ports:
       - 80:80
     restart: always #明示的にstopさせるまでリスタートする。（失敗するたび遅延あり）
-    volumes:
-      - tmp-data:/myapp-miguchi/tmp/sockets
-      - public-data:/myapp-miguchi/public
     depends_on:
       - web 
 
 volumes:
   mysql-data:
-  tmp-data:
-  public-data:

@@ -1,5 +1,4 @@
 FROM --platform=linux/x86_64 ruby:3.1
-LABEL maintainer="Munetake_Miguchi<guchim1229@gmail.com>"
 
 #環境変数
 ENV APP="/myapp-miguchi"  \
@@ -17,3 +16,17 @@ RUN apt-get update && apt-get install -y \
 WORKDIR $APP
 COPY Gemfile Gemfile.lock $CONTAINER_ROOT
 RUN bundle install
+## ↓ここが懸念点（開発環境ではCOPYをしたくないが、本番環境でする必要があるため、この記述）
+COPY . .
+
+# DB関連の実行
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
+# 以下の記述があることでnginxから見ることができる
+VOLUME ["/myapp-miguchi/public"]
+VOLUME ["/myapp-miguchi/tmp"]
+
+# railsアプリ起動コマンド
+CMD ["unicorn", "-p", "3000", "-c", "/myapp-miguchi/config/unicorn.rb", "-E", "$RAILS_ENV"]
