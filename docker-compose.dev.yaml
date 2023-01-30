@@ -4,6 +4,7 @@ services:
   web:
     build:
       context: .
+    platform: linux/amd64
     tty: true
     stdin_open: true
     ports:
@@ -24,6 +25,7 @@ services:
     platform: linux/x86_64 #M1チップ対応のため追記
     restart: always
     image: mysql:8
+    platform: linux/amd64
     ports:
       - 3306:3306
     volumes:
@@ -35,6 +37,7 @@ services:
   nginx:
     build:
       context: ./nginx
+    platform: linux/amd64
     ports:
       - 80:80
     restart: always #明示的にstopさせるまでリスタートする。（失敗するたび遅延あり）
